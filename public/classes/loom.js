@@ -36,7 +36,7 @@ export class Loom{
 			drawLoomState(userInput.cols, userInput.rows, i, this.workingTextile, this.height, this.width); //Should find a better way? we're passing a lot here
 			
 			const rowInput = await inputLoomRow();
-			this.workingWeave.addRow(rowInput);
+			this.workingTextile.addRow(rowInput);
 		}
 
 		return this.workingTextile;

@@ -43,10 +43,11 @@ export function drawLoomState(numWarps, numRows, rowOn, textile, loomHeight, loo
 
 		//draw the finished rows
 		let weaveRowHeight = curRowHeight + rowHeight;
-		if(textile != null){
+		if(textile.weaveRows.length > 0){
 			let weaveRowHeight = curRowHeight + rowHeight;
-			for(let j = 0; j < textile.weaveRows[i].weave.length; j++){
-				ctx.strokeStyle = baseGameInfo.possibleColors[textile.weaveRows[i].colors[j]];
+			//debugger;
+			for(let j = 0; j < textile.weaveRows.length; j++){
+				ctx.strokeStyle = baseGameInfo.possibleColors[textile.weaveRows[j].colors[i]];
 				ctx.fillRect(curSpace - (space/2), weaveRowHeight, space, rowHeight);
 				weaveRowHeight += rowHeight;
 			}
