@@ -19,12 +19,12 @@ function runSetup(){
 	return gameSetup(playerOptions, loomOptions);
 }
 
-function runGame(){
+async function runGame(){
 	let game = runSetup();
 
 	while(true){
 		game.listOwnedTextiles();
-		game.makeTextile();
+		await game.makeTextile();
 	}
 
 }

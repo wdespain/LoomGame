@@ -16,10 +16,10 @@ export class Game{
 		drawColorPicker(this.player.availableColors);
 	}
 
-	makeTextile(){
+	async makeTextile(){
 		this.constructLoomUI();
 		//this assumes you have to finish a textile before you can do something else, but you should be able to pause and such
-		this.player.addOwnedTextile(this.loom.startWeaving()); 
+		this.player.addOwnedTextile(await this.loom.startWeaving()); 
 		this.loom.clearWorkingWeave();
 	}
 
