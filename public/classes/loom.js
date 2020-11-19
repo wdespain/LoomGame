@@ -1,5 +1,6 @@
 import { Textile } from "./textile.js";
 import { drawLoomWeavingArea, drawLoomState } from "../functions/allDrawing.js";
+import { inputLoomRow } from "../functions/input.js";
 
 export class Loom{
 	//options is a json that should contain:
@@ -24,24 +25,18 @@ export class Loom{
 		}
 	}
 
-	startTextile(){
+	async startTextile(){
 		const userInput = this.getUserInput();
 
 		drawLoomWeavingArea(this.height, this.width);
 
 		this.workingTextile = new Textile(userInput.cols);
 
-		$("#next").on("click", function(){
-			//get user input (dumy stuff for now)
-			let input = { "weave" : [0, 1, 0, 1, 0, 1], "colors" : ["red", "blue", "red", "blue", "red", "blue"] }
-			this.workingTextile.addRow(input);
-
-		})
-
 		for(let i = 0; i <= userInput.rows; i++){
 			drawLoomState(userInput.cols, userInput.rows, i, this.workingTextile, this.height, this.width); //Should find a better way? we're passing a lot here
 			
-			//Need to await!!!
+			const rowInput = await inputLoomRow();
+			this.workingWeave.addRow(rowInput);
 		}
 
 		return this.workingTextile;

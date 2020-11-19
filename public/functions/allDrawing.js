@@ -42,6 +42,7 @@ export function drawLoomState(numWarps, numRows, rowOn, textile, loomHeight, loo
 		ctx.stroke();
 
 		//draw the finished rows
+		let weaveRowHeight = curRowHeight + rowHeight;
 		if(textile != null){
 			let weaveRowHeight = curRowHeight + rowHeight;
 			for(let j = 0; j < textile.weaveRows[i].weave.length; j++){
