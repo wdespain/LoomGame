@@ -17,7 +17,7 @@ export function drawColorPicker(colors){
 	$("#colorPicker").html(colorButtonHtml);
 }
 
-export function drawLoomState(numWarps, numRows, rowOn, weave, loomHeight, loomWidth){
+export function drawLoomState(numWarps, numRows, rowOn, textile, loomHeight, loomWidth){
 	let c = document.getElementById("loom");
 	let ctx = c.getContext("2d");
 	ctx.clearRect(0, 0, c.width, c.height);
@@ -42,11 +42,13 @@ export function drawLoomState(numWarps, numRows, rowOn, weave, loomHeight, loomW
 		ctx.stroke();
 
 		//draw the finished rows
-		let weaveRowHeight = curRowHeight + rowHeight;
-		for(let j = 0; j < weave.weave.length; j++){
-			ctx.strokeStyle = baseGameInfo.possibleColors[weave.colors[i]];
-			ctx.fillRect(curSpace - (space/2), weaveRowHeight, space, rowHeight);
-			weaveRowHeight += rowHeight;
+		if(textile != null){
+			let weaveRowHeight = curRowHeight + rowHeight;
+			for(let j = 0; j < textile.weaveRows[i].weave.length; j++){
+				ctx.strokeStyle = baseGameInfo.possibleColors[textile.weaveRows[i].colors[j]];
+				ctx.fillRect(curSpace - (space/2), weaveRowHeight, space, rowHeight);
+				weaveRowHeight += rowHeight;
+			}
 		}
 
 		curSpace += space;

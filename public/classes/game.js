@@ -19,8 +19,8 @@ export class Game{
 	makeTextile(){
 		this.constructLoomUI();
 		//this assumes you have to finish a textile before you can do something else, but you should be able to pause and such
-		this.player.addOwnedTextile(this.loom.startWeaving()); 
-		this.loom.clearWorkingWeave();
+		this.player.addOwnedTextile(this.loom.startTextile()); 
+		this.loom.clearWorkingTextile();
 	}
 
 	listOwnedTextiles(){
