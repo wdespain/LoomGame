@@ -30,7 +30,7 @@ export class Loom{
 
 		drawLoomWeavingArea(this.height, this.width);
 
-		this.workingTextile = new Textile(userInput.cols);
+		this.workingTextile = new Textile(userInput);
 
 		for(let i = 0; i <= userInput.rows; i++){
 			drawLoomState(userInput.cols, userInput.rows, i, this.workingTextile, this.height, this.width); //Should find a better way? we're passing a lot here

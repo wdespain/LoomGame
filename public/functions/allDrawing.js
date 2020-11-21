@@ -21,7 +21,6 @@ export function drawLoomState(numWarps, numRows, rowOn, textile, loomHeight, loo
 	let c = document.getElementById("loom");
 	let ctx = c.getContext("2d");
 	ctx.clearRect(0, 0, c.width, c.height);
-
 	const space = loomWidth / (numWarps + 1);
 	let curSpace = space;
 	const rowHeight = loomHeight / numRows;
@@ -29,25 +28,23 @@ export function drawLoomState(numWarps, numRows, rowOn, textile, loomHeight, loo
 
 
 	for(let i = 0; i < numWarps; i++){
+		ctx.beginPath();
 		//draw warps
 		ctx.strokeStyle = "#ff0000"; //This should be taken from the color of the thread used for this
 		ctx.moveTo(curSpace, 0);
 		ctx.lineTo(curSpace, (curRowHeight - rowHeight));
 		ctx.stroke();
-
 		//draw input circles
 		ctx.strokeStyle = "#000000";
 		ctx.beginPath();
 		ctx.arc(curSpace, curRowHeight - (rowHeight/2), (rowHeight/2), 0, 2 * Math.PI);
 		ctx.stroke();
-
 		//draw the finished rows
-		let weaveRowHeight = curRowHeight + rowHeight;
 		if(textile.weaveRows.length > 0){
-			let weaveRowHeight = curRowHeight + rowHeight;
+			let weaveRowHeight = curRowHeight;
 			//debugger;
 			for(let j = 0; j < textile.weaveRows.length; j++){
-				ctx.strokeStyle = baseGameInfo.possibleColors[textile.weaveRows[j].colors[i]];
+				ctx.strokeStyle = ctx.fillStyle = baseGameInfo.possibleColors[textile.weaveRows[j].colors[i]];
 				ctx.fillRect(curSpace - (space/2), weaveRowHeight, space, rowHeight);
 				weaveRowHeight += rowHeight;
 			}
@@ -60,7 +57,7 @@ export function drawLoomState(numWarps, numRows, rowOn, textile, loomHeight, loo
 export function drawOwnedTextiles(textiles){
 	let textileText = "<ul>"
 	for(const textile of textiles){
-		textileText += `${textile.name}`;
+		textileText += `<li> ${textile.name} </li>`;
 	}
 	textileText += "</ul>";
 	$("#ownedTextiles").html(textileText);

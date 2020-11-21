@@ -2,8 +2,9 @@ export class Textile{
 	//options is a json that should include:
 	//  cols - int, the number of warp threads (collumns)
 	//  name - string, the name of the textile
-	constructor(cols, name){
-		this.warpNum = cols;
+	constructor(options){
+		this.name = options.name;
+		this.warpNum = options.cols;
 		this.weaveRows = [];
 	}
 
