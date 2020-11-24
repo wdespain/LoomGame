@@ -64,8 +64,9 @@ export function drawLoomState(
 		let weaveRowHeight = curRowHeight + rowHeight;
 		if (weave.weave.length > 0) {
 			debugger;
-			for(let j = 0; j < weave.weave[i].weave.length; j++){
-				ctx.strokeStyle = baseGameInfo.possibleColors[weave.weave[i].colors[j]];
+			for(let j = 0; j < weave.weave.length; j++){
+        const strokeColor = weave.weave[j].colors[i];
+				ctx.strokeStyle = baseGameInfo.possibleColors[strokeColor];
 				ctx.fillRect(curSpace - (space/2), weaveRowHeight, space, rowHeight);
 				weaveRowHeight += rowHeight;
 			}
