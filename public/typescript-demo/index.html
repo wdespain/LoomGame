@@ -1,0 +1,23 @@
+<p>To compile the typescript you can run one of two options</p>
+<ul>
+  <li><pre>npm run-script build</pre></li>
+  <li><pre>npm run-script watch</pre></li>
+</ul>
+
+<p>
+  Similar to how nodemon refeshes on js file change, the tsc watch option
+  watches typescript files for changes and then compiles them on the fly.
+  Try out both to get a feel for them.
+</p>
+<p>
+  As an asside, We don't necessarily need nodemon to start the server
+  because I don't see us changing server.ts often enough to benefit from
+  the change. Feel free to take this thought with a grain of salt.
+</p>
+<p>
+  We will need to add javascript files to the .gitignore. I'll add it as a
+  task to our Loom Game Tasks spreadsheet.
+</p>
+
+<p>Now check the console to see what this imported js did</p>
+<script src="main.js" type="module"></script>

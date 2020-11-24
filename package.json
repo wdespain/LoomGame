@@ -2,9 +2,9 @@
   "name": "LoomWeaving",
   "version": "1.0.0",
   "main": "server.js",
-  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx tsc --project tsconfig.json",
+    "watch": "npx tsc --watch --project tsconfig.json"
   },
   "author": "",
   "license": "ISC",
@@ -13,5 +13,8 @@
     "express": "^4.16.4",
     "jquery": "^3.3.1",
     "nodemon": "^1.18.10"
+  },
+  "devDependencies": {
+    "typescript": "^4.1.2"
   }
 }
