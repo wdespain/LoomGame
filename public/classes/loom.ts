@@ -11,13 +11,13 @@ export class Loom {
   height: number;
   width: number;
 
-  workingWeave: Textile | null;
+  workingTextile: Textile | null;
 
 	constructor(options: LoomOptions){
 		this.height = options.height;
 		this.width = options.width;
 
-		this.workingWeave = null;
+		this.workingTextile = null;
 	}
 
 	getUserInput(){
@@ -35,19 +35,19 @@ export class Loom {
 
 		drawLoomWeavingArea(this.height, this.width);
 
-		this.workingWeave = new Textile(userInput.cols, 'warfidome');
+		this.workingTextile = new Textile(userInput);
 
 		for(let i = 0; i <= userInput.rows; i++){
-			drawLoomState(userInput.cols, userInput.rows, i, this.workingWeave, this.height, this.width); //Should find a better way? we're passing a lot here
+			drawLoomState(userInput.cols, userInput.rows, i, this.workingTextile, this.height, this.width); //Should find a better way? we're passing a lot here
 			
 			const rowInput = await inputLoomRow();
-			this.workingWeave.addRow(rowInput);
+			this.workingTextile.addRow(rowInput);
 		}
 
-		return this.workingWeave;
+		return this.workingTextile;
 	}
 
-	clearWorkingWeave(){
-		this.workingWeave = null;
+	clearWorkingTextile(){
+		this.workingTextile = null;
 	}
 }

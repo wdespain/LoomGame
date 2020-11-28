@@ -22,7 +22,7 @@ export function drawLoomState(
   numWarps: number,
   numRows: number,
   rowOn: number,
-  weave: Textile,
+  textile: Textile,
   loomHeight: number,
   loomWidth: number,
 ): void {
@@ -48,6 +48,7 @@ export function drawLoomState(
 
 
 	for(let i = 0; i < numWarps; i++){
+		ctx.beginPath();
 		//draw warps
 		ctx.strokeStyle = "#ff0000"; //This should be taken from the color of the thread used for this
 		ctx.moveTo(curSpace, 0);
@@ -61,12 +62,10 @@ export function drawLoomState(
 		ctx.stroke();
 
 		//draw the finished rows
-		let weaveRowHeight = curRowHeight + rowHeight;
-		if (weave.weave.length > 0) {
-			debugger;
-			for(let j = 0; j < weave.weave.length; j++){
-        const strokeColor = weave.weave[j].colors[i];
-				ctx.strokeStyle = baseGameInfo.possibleColors[strokeColor];
+		if(textile.weaveRows.length > 0){
+        	let weaveRowHeight = curRowHeight;
+            for(let j = 0; j < textile.weaveRows.length; j++){
+				ctx.strokeStyle = ctx.fillStyle = baseGameInfo.possibleColors[textile.weaveRows[j].colors[i]];
 				ctx.fillRect(curSpace - (space/2), weaveRowHeight, space, rowHeight);
 				weaveRowHeight += rowHeight;
 			}
@@ -79,8 +78,7 @@ export function drawLoomState(
 export function drawOwnedTextiles(textiles: Array<Textile>): void {
 	let textileText = "<ul>"
 	for(const textile of textiles){
-		// textileText += `${textile.name}`;
-		textileText += "${textile.name}";
+		textileText += `<li> ${textile.name} </li>`;
 	}
 	textileText += "</ul>";
 	$("#ownedTextiles").html(textileText);

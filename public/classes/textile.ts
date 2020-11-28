@@ -1,15 +1,22 @@
 import { RowInfo } from "../model/types";
 
-export class Textile{
-  warpNum: number;
-  weave: Array<RowInfo>
+export interface TextileOptions {
+  cols: number;
+  name: string;
+}
 
-	constructor(cols: number, name: string) {
-		this.warpNum = cols;
-		this.weave = [];
+export class Textile{
+  name: string;
+  warpNum: number;
+  weaveRows: Array<RowInfo>
+
+	constructor(options: TextileOptions) {
+		this.name = options.name;
+		this.warpNum = options.cols;
+		this.weaveRows = [];
 	}
 
 	addRow(rowInfo: RowInfo) {
-		this.weave.push(rowInfo);
+		this.weaveRows.push(rowInfo);
 	}
 }
