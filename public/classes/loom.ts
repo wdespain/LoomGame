@@ -1,17 +1,18 @@
 import { Textile } from "./textile";
 import { drawLoomWeavingArea, drawLoomState } from "../functions/allDrawing.js";
 import { inputLoomRow } from "../functions/input.js";
+import { LoomState, WarpPosition } from "../model/types.js";
 
 export interface LoomOptions {
-  height: number;
-  width: number;
+    height: number;
+    width: number;
 }
 
 export class Loom {
-  height: number;
-  width: number;
+    height: number;
+    width: number;
 
-  workingTextile: Textile | null;
+    workingTextile: Textile | null;
 
 	constructor(options: LoomOptions){
 		this.height = options.height;
@@ -30,18 +31,31 @@ export class Loom {
 		}
 	}
 
-	async startWeaving(){
-		const userInput = this.getUserInput();
+    async startWeaving() {
+        const userInput = this.getUserInput();
+        const textile = new Textile(userInput);
+        const loomState: LoomState = {
+            numWarps: userInput.cols,
+            numRows: userInput.rows,
+            loomHeight: this.height,
+            loomWidth: this.width,
+            textile,
+            // TODO make this magic range code a util https://stackoverflow.com/a/37980601/14308614
+            warpState: [...Array(userInput.cols).keys()].map(_ => ({
+            position: WarpPosition.Under,
+            weftColor: 'blue', // This default should be taken from the list of thread colors
+            })),
+    	};
+		this.workingTextile = textile
 
 		drawLoomWeavingArea(this.height, this.width);
 
-		this.workingTextile = new Textile(userInput);
-
 		for(let i = 0; i <= userInput.rows; i++){
-			drawLoomState(userInput.cols, userInput.rows, i, this.workingTextile, this.height, this.width); //Should find a better way? we're passing a lot here
+			const loomCanvasInputs = drawLoomState(loomState, this.workingTextile, i);
 			
-			const rowInput = await inputLoomRow();
-			this.workingTextile.addRow(rowInput);
+            const rowInput = await inputLoomRow(loomState, loomCanvasInputs);
+
+            this.workingTextile.addRow(rowInput);
 		}
 
 		return this.workingTextile;

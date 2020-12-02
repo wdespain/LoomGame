@@ -1,14 +1,14 @@
-import { RowInfo } from "../model/types";
+import { Color, TextileState, WarpConfig } from "../model/types";
 
 export interface TextileOptions {
   cols: number;
   name: string;
 }
 
-export class Textile{
+export class Textile implements TextileState{
   name: string;
   warpNum: number;
-  weaveRows: Array<RowInfo>
+  weaveRows: Array<Array<WarpConfig>>
 
 	constructor(options: TextileOptions) {
 		this.name = options.name;
@@ -16,7 +16,7 @@ export class Textile{
 		this.weaveRows = [];
 	}
 
-	addRow(rowInfo: RowInfo) {
-		this.weaveRows.push(rowInfo);
+	addRow(row: Array<WarpConfig>) {
+		this.weaveRows.push(row);
 	}
 }
