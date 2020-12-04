@@ -1,11 +1,18 @@
-import { RowInfo } from "../model/types";
+import { LoomCanvasInputs, LoomState, WarpConfig } from "../model/types";
+import { disableWarpInputCanvasListener, enableWarpInputCanvasListener } from "./canvas";
 
-export function inputLoomRow(): Promise<RowInfo> {
+export function inputLoomRow(loomState: LoomState, loomCanvasInputs: LoomCanvasInputs): Promise<Array<WarpConfig>> {
+  const listener = enableWarpInputCanvasListener(loomState, loomCanvasInputs);
+  
   return new Promise((resolve, reject) => {
-    $("#next").on("click", function(){
-      //get user input (dumy stuff for now)
-      let input = { "weave" : [0, 1, 0, 1, 0, 1], "colors" : ["red", "blue", "red", "blue", "red", "blue"] }
-      resolve(input);
+    $("#next").on("click", function() {
+      // Do we need to also remove the #next.on(click) event listener to avoid a memory leak?
+      disableWarpInputCanvasListener(listener);
+      resolve(clone(loomState.warpState));
     });
   });
+}
+
+function clone<T>(thing: T): T {
+  return JSON.parse(JSON.stringify(thing))
 }

@@ -2,3 +2,5 @@ node_modules/
 
 *.js
 !server.js
+
+.vscode
