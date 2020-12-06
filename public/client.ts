@@ -32,4 +32,7 @@ async function runGame(){
 
 }
 
-runGame();
+
+window.onload = () => {
+	runGame();
+};

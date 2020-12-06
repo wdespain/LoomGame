@@ -41,3 +41,8 @@ export interface LoomCanvasInputs {
   redraw: () => void;
   warpInputCircles: Array<WarpInputCircle>,
 }
+
+export interface Pattern {
+  name: string;
+  rows: Array<Array<Color>>;
+}

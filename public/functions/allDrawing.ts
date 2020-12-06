@@ -1,11 +1,14 @@
 import { AvailableColors } from "../classes/player.js";
 import { Textile } from "../classes/textile.js";
 import { baseGameInfo } from "../gameInfo/baseGameInfo.js";
-import { LoomCanvasInputs, LoomState, WarpInputCircle, WarpPosition } from "../model/types.js";
+import { LoomCanvasInputs, LoomState, Pattern, WarpInputCircle, WarpPosition } from "../model/types.js";
 import { getCanvasAndContext } from "./canvas.js";
 
 export function drawLoomWeavingArea(height: number, width: number){
-	$("#loomCanvas").html(`<canvas id="loom" width="${width}" height="${height}" style="border:1px solid #000000;"></canvas>`);
+  $("#loomCanvas").html(`
+  <canvas id="loom" width="${width}" height="${height}" style="border:1px solid #000000;"></canvas>
+  <canvas id="exampleLoom" width="${width}" height="${height}" style="border:1px solid #000000;"></canvas>
+  `);
 }
 
 export function drawColorPicker(colors: AvailableColors): void {
@@ -46,7 +49,7 @@ export function drawLoomState(
     redraw: () => void,
 ): LoomCanvasInputs {
     const { numWarps, numRows, loomHeight, loomWidth } = loomState;
-    const { canvas, context: ctx } = getCanvasAndContext();
+    const { canvas, context: ctx } = getCanvasAndContext('loom');
     const loomCanvasInputs: LoomCanvasInputs = {
       warpInputCircles: [],
       redraw,
@@ -110,4 +113,23 @@ export function drawOwnedTextiles(textiles: Array<Textile>): void {
 	}
 	textileText += "</ul>";
 	$("#ownedTextiles").html(textileText);
+}
+
+export function drawTargetTextile(target: Pattern): void {
+  const { canvas, context } = getCanvasAndContext('exampleLoom');
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  
+  const left = 30;
+  const top = 60;
+  const width = 30;
+  const height = 30;
+
+  target.rows.forEach((row, r) => {
+    row.forEach((color, j) => {
+      const x = j * width + left;
+      const y = r * height + top;
+      context.fillStyle = color
+      context.fillRect(x, y, width, height);
+    });
+  });
 }
