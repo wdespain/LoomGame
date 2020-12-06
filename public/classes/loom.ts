@@ -2,7 +2,7 @@ import { Textile } from "./textile";
 import { drawLoomWeavingArea, drawLoomState, drawTargetTextile } from "../functions/allDrawing.js";
 import { inputLoomRow } from "../functions/input.js";
 import { LoomState, WarpPosition } from "../model/types.js";
-import { randomPattern } from "../functions/customers";
+import { randomPattern, evaluateTextile } from "../functions/customers";
 
 export interface LoomOptions {
     height: number;
@@ -50,19 +50,21 @@ export class Loom {
             })),
     	};
 		this.workingTextile = textile
-
+		const targetPattern = randomPattern(loomState.numRows, loomState.numWarps, ['red', 'blue']);
+		
 		drawLoomWeavingArea(this.height, this.width);
-		drawTargetTextile(randomPattern(loomState.numRows, loomState.numWarps, ['red', 'blue']));
+		drawTargetTextile(targetPattern);
 
 		const redraw = () => {
 			if (this.workingTextile != null) {
-				for (let i = 0; i <= userInput.rows; i++) {
+				for (let i = 0; i < userInput.rows; i++) {
 					drawLoomState(loomState, this.workingTextile, this.workingRow, redraw);
 				}
 			}
 		}
 
-		for(let i = 0; i <= userInput.rows; i++){
+		let i = 0;
+		for(; i < userInput.rows; i++){
 			this.workingRow = i;
 			const loomCanvasInputs = drawLoomState(loomState, this.workingTextile, i, redraw);
 			
@@ -70,6 +72,10 @@ export class Loom {
 
 			this.workingTextile.addRow(rowInput);
 		}
+		drawLoomState(loomState, this.workingTextile, i, redraw);
+
+		const score = evaluateTextile(this.workingTextile, targetPattern);
+		alert(`You scored ${score}!`);
 
 		return this.workingTextile;
 	}
