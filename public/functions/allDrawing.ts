@@ -43,11 +43,13 @@ export function drawLoomState(
     loomState: LoomState,
     textile: Textile,
     rowOn: number,
+    redraw: () => void,
 ): LoomCanvasInputs {
     const { numWarps, numRows, loomHeight, loomWidth } = loomState;
     const { canvas, context: ctx } = getCanvasAndContext();
     const loomCanvasInputs: LoomCanvasInputs = {
-        warpInputCircles: [],
+      warpInputCircles: [],
+      redraw,
     };
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -66,9 +68,12 @@ export function drawLoomState(
 		ctx.lineTo(curSpace, (curRowHeight - rowHeight));
 		ctx.stroke();
 
-        //draw input circles
-        const warpCircle = createWarpInputCircle(i, curSpace, curRowHeight, rowHeight);
-		ctx.strokeStyle = "#000000";
+      //draw input circles
+    const warpCircle = createWarpInputCircle(i, curSpace, curRowHeight, rowHeight);
+    const warpState = loomState.warpState[i];
+    ctx.strokeStyle = warpState.position === WarpPosition.Over
+      ? 'red' //This should be taken from the color of the thread used for this
+      : warpState.weftColor;
 		ctx.beginPath();
 		ctx.arc(warpCircle.center.x, warpCircle.center.y, warpCircle.radius, 0, 2 * Math.PI);
         ctx.stroke();

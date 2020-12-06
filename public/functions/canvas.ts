@@ -71,6 +71,7 @@ export function enableWarpInputCanvasListener(
     }
 
     loomState.warpState[warp.warpIndex].position = toggleWarpPosition(loomState.warpState[warp.warpIndex].position);
+    loomCanvasInputs.redraw();
   };
 
   canvas.addEventListener('click', onclick);

@@ -12,13 +12,15 @@ export class Loom {
     height: number;
     width: number;
 
-    workingTextile: Textile | null;
+		workingTextile: Textile | null;
+		workingRow: number;
 
 	constructor(options: LoomOptions){
 		this.height = options.height;
 		this.width = options.width;
 
 		this.workingTextile = null;
+		this.workingRow = 0;
 	}
 
 	getUserInput(){
@@ -48,10 +50,18 @@ export class Loom {
     	};
 		this.workingTextile = textile
 
-		drawLoomWeavingArea(this.height, this.width);
+		const redraw = () => {
+			if (this.workingTextile != null) {
+				for (let i = 0; i <= userInput.rows; i++) {
+					drawLoomState(loomState, this.workingTextile, this.workingRow, redraw);
+				}
+			}
+		}
 
 		for(let i = 0; i <= userInput.rows; i++){
-			const loomCanvasInputs = drawLoomState(loomState, this.workingTextile, i);
+			this.workingRow = i;
+			drawLoomWeavingArea(this.height, this.width);
+			const loomCanvasInputs = drawLoomState(loomState, this.workingTextile, i, redraw);
 			
             const rowInput = await inputLoomRow(loomState, loomCanvasInputs);
 
