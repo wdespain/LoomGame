@@ -37,5 +37,12 @@ export interface WarpInputCircle extends Circle {
 }
 
 export interface LoomCanvasInputs {
+  /** redraw the game to update inputs */
+  redraw: () => void;
   warpInputCircles: Array<WarpInputCircle>,
+}
+
+export interface Pattern {
+  name: string;
+  rows: Array<Array<Color>>;
 }

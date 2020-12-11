@@ -6,11 +6,11 @@ type OnclickEventHandler = (this: GlobalEventHandlers, ev: MouseEvent) => any;
 /**
  * Get the canvas and context for the game. Throws if the canvas is not found.
  */
-export function getCanvasAndContext(): {
+export function getCanvasAndContext(canvasId: string): {
   canvas: HTMLCanvasElement,
   context: CanvasRenderingContext2D,
 } {
-  const canvas = document.querySelector('canvas#loom') as (HTMLCanvasElement | null)
+  const canvas = document.querySelector(`canvas#${canvasId}`) as (HTMLCanvasElement | null)
   if (canvas == null) {
     throw new Error('Could not find the canvas loom element');
   }
@@ -55,7 +55,7 @@ export function enableWarpInputCanvasListener(
   loomState: LoomState,
   loomCanvasInputs: LoomCanvasInputs,
 ): OnclickEventHandler {
-  const { canvas } = getCanvasAndContext();
+  const { canvas } = getCanvasAndContext('loom');
 
   const onclick = (ev: MouseEvent) => {
     const point = normalizeClickCoordinates(canvas, ev.clientX, ev.clientY);
@@ -71,6 +71,7 @@ export function enableWarpInputCanvasListener(
     }
 
     loomState.warpState[warp.warpIndex].position = toggleWarpPosition(loomState.warpState[warp.warpIndex].position);
+    loomCanvasInputs.redraw();
   };
 
   canvas.addEventListener('click', onclick);
@@ -78,6 +79,6 @@ export function enableWarpInputCanvasListener(
 }
 
 export function disableWarpInputCanvasListener(onclick: OnclickEventHandler): void {
-  const { canvas } = getCanvasAndContext();
+  const { canvas } = getCanvasAndContext('loom');
   canvas.removeEventListener('click', onclick);
 }

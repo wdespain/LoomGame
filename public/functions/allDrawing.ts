@@ -1,11 +1,14 @@
 import { AvailableColors } from "../classes/player.js";
 import { Textile } from "../classes/textile.js";
 import { baseGameInfo } from "../gameInfo/baseGameInfo.js";
-import { LoomCanvasInputs, LoomState, WarpInputCircle, WarpPosition } from "../model/types.js";
+import { LoomCanvasInputs, LoomState, Pattern, WarpInputCircle, WarpPosition } from "../model/types.js";
 import { getCanvasAndContext } from "./canvas.js";
 
 export function drawLoomWeavingArea(height: number, width: number){
-	$("#loomCanvas").html(`<canvas id="loom" width="${width}" height="${height}" style="border:1px solid #000000;"></canvas>`);
+  $("#loomCanvas").html(`
+  <canvas id="loom" width="${width}" height="${height}" style="border:1px solid #000000;"></canvas>
+  <canvas id="exampleLoom" width="${width}" height="${height}" style="border:1px solid #000000;"></canvas>
+  `);
 }
 
 export function drawColorPicker(colors: AvailableColors): void {
@@ -43,11 +46,13 @@ export function drawLoomState(
     loomState: LoomState,
     textile: Textile,
     rowOn: number,
+    redraw: () => void,
 ): LoomCanvasInputs {
     const { numWarps, numRows, loomHeight, loomWidth } = loomState;
-    const { canvas, context: ctx } = getCanvasAndContext();
+    const { canvas, context: ctx } = getCanvasAndContext('loom');
     const loomCanvasInputs: LoomCanvasInputs = {
-        warpInputCircles: [],
+      warpInputCircles: [],
+      redraw,
     };
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -66,9 +71,12 @@ export function drawLoomState(
 		ctx.lineTo(curSpace, (curRowHeight - rowHeight));
 		ctx.stroke();
 
-        //draw input circles
-        const warpCircle = createWarpInputCircle(i, curSpace, curRowHeight, rowHeight);
-		ctx.strokeStyle = "#000000";
+      //draw input circles
+    const warpCircle = createWarpInputCircle(i, curSpace, curRowHeight, rowHeight);
+    const warpState = loomState.warpState[i];
+    ctx.strokeStyle = warpState.position === WarpPosition.Over
+      ? 'red' //This should be taken from the color of the thread used for this
+      : warpState.weftColor;
 		ctx.beginPath();
 		ctx.arc(warpCircle.center.x, warpCircle.center.y, warpCircle.radius, 0, 2 * Math.PI);
         ctx.stroke();
@@ -105,4 +113,23 @@ export function drawOwnedTextiles(textiles: Array<Textile>): void {
 	}
 	textileText += "</ul>";
 	$("#ownedTextiles").html(textileText);
+}
+
+export function drawTargetTextile(target: Pattern): void {
+  const { canvas, context } = getCanvasAndContext('exampleLoom');
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  
+  const left = 30;
+  const top = 60;
+  const width = 30;
+  const height = 30;
+
+  target.rows.forEach((row, r) => {
+    row.forEach((color, j) => {
+      const x = j * width + left;
+      const y = r * height + top;
+      context.fillStyle = color
+      context.fillRect(x, y, width, height);
+    });
+  });
 }

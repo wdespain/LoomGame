@@ -1,7 +1,8 @@
 import { Textile } from "./textile";
-import { drawLoomWeavingArea, drawLoomState } from "../functions/allDrawing.js";
+import { drawLoomWeavingArea, drawLoomState, drawTargetTextile } from "../functions/allDrawing.js";
 import { inputLoomRow } from "../functions/input.js";
 import { LoomState, WarpPosition } from "../model/types.js";
+import { randomPattern, evaluateTextile } from "../functions/customers";
 
 export interface LoomOptions {
     height: number;
@@ -12,13 +13,15 @@ export class Loom {
     height: number;
     width: number;
 
-    workingTextile: Textile | null;
+		workingTextile: Textile | null;
+		workingRow: number;
 
 	constructor(options: LoomOptions){
 		this.height = options.height;
 		this.width = options.width;
 
 		this.workingTextile = null;
+		this.workingRow = 0;
 	}
 
 	getUserInput(){
@@ -47,16 +50,32 @@ export class Loom {
             })),
     	};
 		this.workingTextile = textile
-
+		const targetPattern = randomPattern(loomState.numRows, loomState.numWarps, ['red', 'blue']);
+		
 		drawLoomWeavingArea(this.height, this.width);
+		drawTargetTextile(targetPattern);
 
-		for(let i = 0; i <= userInput.rows; i++){
-			const loomCanvasInputs = drawLoomState(loomState, this.workingTextile, i);
-			
-            const rowInput = await inputLoomRow(loomState, loomCanvasInputs);
-
-            this.workingTextile.addRow(rowInput);
+		const redraw = () => {
+			if (this.workingTextile != null) {
+				for (let i = 0; i < userInput.rows; i++) {
+					drawLoomState(loomState, this.workingTextile, this.workingRow, redraw);
+				}
+			}
 		}
+
+		let i = 0;
+		for(; i < userInput.rows; i++){
+			this.workingRow = i;
+			const loomCanvasInputs = drawLoomState(loomState, this.workingTextile, i, redraw);
+			
+			const rowInput = await inputLoomRow(loomState, loomCanvasInputs);
+
+			this.workingTextile.addRow(rowInput);
+		}
+		drawLoomState(loomState, this.workingTextile, i, redraw);
+
+		const score = evaluateTextile(this.workingTextile, targetPattern);
+		alert(`You scored ${score}!`);
 
 		return this.workingTextile;
 	}
